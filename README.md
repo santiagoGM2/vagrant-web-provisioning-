@@ -30,6 +30,12 @@ vagrant-web-provisioning/
 └── README.md
 
 ---
+## 📸 Evidencia visual
+
+La siguiente captura muestra la aplicación en funcionamiento desde el navegador:
+
+![Evidencia de la aplicación](./screenshots/info.png)
+
 
 ## 🚀 Pasos de Instalación
 
