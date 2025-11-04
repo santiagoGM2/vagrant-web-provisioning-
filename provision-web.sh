@@ -1,17 +1,22 @@
 #!/usr/bin/env bash
+set -e
+export DEBIAN_FRONTEND=noninteractive
 
-# Actualizar paquetes
-sudo apt-get update -y
+echo ">>> Provisioning web: update & install apache + php + psql ext"
+apt-get update -y
+apt-get install -y apache2 php libapache2-mod-php php-cli php-pgsql
 
-# Instalar Apache y PHP
-sudo apt-get install -y apache2 php libapache2-mod-php
+# Copiar contenido del folder sincronizado al directorio web
+if [ -d /vagrant_data ]; then
+  echo ">>> Copiando archivos web a /var/www/html"
+  rm -rf /var/www/html/*
+  cp -R /vagrant_data/* /var/www/html/
+  chown -R www-data:www-data /var/www/html
+fi
 
-# Habilitar Apache al inicio
-sudo systemctl enable apache2
-sudo systemctl start apache2
+a2enmod rewrite || true
 
-# Copiar archivos del proyecto (carpeta compartida Vagrant)
-sudo cp -r /vagrant/www/* /var/www/html/
+echo ">>> Reiniciando Apache"
+systemctl restart apache2
 
-# Dar permisos
-sudo chown -R www-data:www-data /var/www/html
+echo ">>> Web provisioning finalizado"
